@@ -142,6 +142,31 @@ func ReadinessHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
+// func (a *App) StartCleanupRoutine(interval time.Duration) {
+// 	ticker := time.NewTicker(interval)
+// 	defer ticker.Stop()
+
+// 	for {
+// 		select {
+// 		case <-ticker.C:
+// 			a.CleanupExpiredObjects()
+// 		}
+// 	}
+// }
+
+// func (a *App) CleanupExpiredObjects() {
+// 	a.storage.mu.Lock()
+// 	defer a.storage.mu.Unlock()
+
+// 	currentTime := time.Now()
+
+// 	for key, obj := range a.storage.objects {
+// 		if obj.Expires != nil && currentTime.After(*obj.Expires) {
+// 			delete(a.storage.objects, key)
+// 		}
+// 	}
+// }
+
 func main() {
 	sourcejson, error := os.Getwd()
 	if error == nil {
@@ -174,6 +199,7 @@ func main() {
 			}
 		}
 	}()
+	// go app.StartCleanupRoutine(1 * time.Minute)
 
 	http.Handle("/", r)
 	http.ListenAndServe(":8080", nil)
